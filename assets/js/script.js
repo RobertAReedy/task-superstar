@@ -210,6 +210,11 @@ $("#trash").droppable({
   }
 });
 
+$("#modalDueDate").datepicker({
+  constrainInput: true,
+  dateFormat: "yy-mm-dd"
+});
+
 // load tasks for the first time
 loadTasks();
 
