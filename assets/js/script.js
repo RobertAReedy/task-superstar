@@ -83,11 +83,16 @@ $(".list-group").on("click", "span", function () {
     .addClass("form-control")
     .val($(this).text().trim());
 
-  $(this).replaceWith(dateEditEl);
+    $(this).replaceWith(dateEditEl);
+    dateEditEl.datepicker({
+      minDate: 1,
+      onClose: function() {$(this).trigger("change");}
+    });
+
   dateEditEl.trigger("focus");
 });
 
-$(".list-group").on("blur", "input[type='text']", function () {
+$(".list-group").on("change", "input[type='text']", function () {
   // get current text
   var date = $(this)
     .val()
@@ -212,7 +217,8 @@ $("#trash").droppable({
 
 $("#modalDueDate").datepicker({
   constrainInput: true,
-  dateFormat: "yy-mm-dd"
+  dateFormat: "mm-dd-yy",
+  minDate: 1
 });
 
 // load tasks for the first time
