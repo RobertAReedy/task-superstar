@@ -13,6 +13,8 @@ var createTask = function (taskText, taskDate, taskList) {
   // append span and p element to parent li
   taskLi.append(taskSpan, taskP);
 
+  // check due date
+  auditTask(taskLi);
 
   // append to ul list on the page
   $("#list-" + taskList).append(taskLi);
@@ -44,6 +46,19 @@ var loadTasks = function () {
 var saveTasks = function () {
   localStorage.setItem("tasks", JSON.stringify(tasks));
 };
+
+let auditTask = function(taskEl) {
+  let date = $(taskEl).find("span").text().trim();
+  let time = moment(date, "L").set("hour", 17);
+
+  $(taskEl).removeClass("list-group-item-warning list-group-item-danger");
+
+  if (moment().isAfter(time)) {
+    $(taskEl).addClass("list-group-item-danger");
+  } else if (moment().add(2, "days").set("hour", 17).isAfter(time)) {
+    $(taskEl).addClass("list-group-item-warning");
+  }
+}
 
 $(".list-group").on("click", "p", function () {
   let text = $(this).text().trim();
@@ -118,8 +133,10 @@ $(".list-group").on("change", "input[type='text']", function () {
     .addClass("badge badge-primary badge-pill")
     .text(date);
 
-  // replace input with span element
-  $(this).replaceWith(taskSpan);
+    // replace input with span element
+    $(this).replaceWith(taskSpan);
+    
+    auditTask($(taskSpan).closest(".list-group-item"));
 });
 
 // modal was triggered
@@ -223,5 +240,3 @@ $("#modalDueDate").datepicker({
 
 // load tasks for the first time
 loadTasks();
-
-
