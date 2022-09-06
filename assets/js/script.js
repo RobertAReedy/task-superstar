@@ -240,3 +240,11 @@ $("#modalDueDate").datepicker({
 
 // load tasks for the first time
 loadTasks();
+
+setInterval(() => {
+  console.log("activating timed audit at " + moment().format("MM-DD-YYYY h:mm:ss"));
+
+  $(".list-group-item").each((index, task) => {
+    auditTask(task);
+  });
+}, 30*60*1000)
